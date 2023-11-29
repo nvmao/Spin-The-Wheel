@@ -118,6 +118,8 @@ chicken</textarea>
         let currentDeg = 0
         let step = 360/items.length
         let colors = []
+        let itemDegs = {}
+
         for(let i = 0 ; i < items.length + 1;i++){
             colors.push(randomColor())
         }
@@ -177,6 +179,13 @@ chicken</textarea>
                 ctx.fillText(items[i], 130, 10);
                 ctx.restore();
 
+                itemDegs[items[i]] = 
+                    {
+                    "startDeg": startDeg,
+                    "endDeg" : endDeg
+                    }
+                
+
                 // check winner
                 if(startDeg%360 < 360 && startDeg%360 > 270  && endDeg % 360 > 0 && endDeg%360 < 90 ){
                     document.getElementById("winner").innerHTML = items[i]
@@ -186,7 +195,7 @@ chicken</textarea>
         
 
         let speed = 0
-        let maxRotation = randomRange(360*3,360*6)
+        let maxRotation = randomRange(360* 3, 360 * 6)
         let pause = false
         function animate(){
             if(pause){
@@ -206,8 +215,17 @@ chicken</textarea>
             if(speed != 0){
                 return
             }
+
+            maxRotation = 0;
             currentDeg = 0
-            maxRotation = randomRange(360*3,360*6)
+            createWheel()
+            draw();
+
+            
+            maxRotation = (360 * 6) - itemDegs['cat'].endDeg + 10
+            itemDegs = {}
+            console.log("max",maxRotation)
+            console.log(itemDegs);
             pause = false
             window.requestAnimationFrame(animate);
         }
